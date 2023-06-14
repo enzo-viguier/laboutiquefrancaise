@@ -71,8 +71,6 @@ class StripeController extends AbstractController
             'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
         ]);
 
-//         $response = new JsonResponse(['id' => $checkout_session->id]);
-//         return $response;
 
         return $this->redirect($checkout_session->url);
 
