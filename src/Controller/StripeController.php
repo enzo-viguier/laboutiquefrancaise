@@ -51,7 +51,7 @@ class StripeController extends AbstractController
         $product_for_stripe[] = [
             'price_data' => [
                 'currency' => 'eur',
-                'unit_amount' => floatval($order->getCarrierPrice()*100),
+                'unit_amount' => floatval($order->getCarrierPrice()),
                 'product_data' => [
                     'name' => $order->getCarrierName(),
                 ],
@@ -67,10 +67,12 @@ class StripeController extends AbstractController
                 $product_for_stripe,
             ],
             'mode' => 'payment',
-            'success_url' => $YOUR_DOMAIN . '/success.html',
-            'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+            'success_url' => $YOUR_DOMAIN . '/commande/merci/{CHECKOUT_SESSION_ID}',
+            'cancel_url' => $YOUR_DOMAIN . '/commande/erreur/{CHECKOUT_SESSION_ID}',
         ]);
 
+        $order->setStripeSessionId($checkout_session->id);
+        $entityManager->flush();
 
         return $this->redirect($checkout_session->url);
 
